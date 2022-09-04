@@ -118,10 +118,6 @@ function open_email(email){
       document.querySelector('#compose-subject').value = 'Re: ' + email['subject'];
       document.querySelector('#compose-body').value = "\n\nOn " + email['timestamp'] + ", " + email['sender'] + ' wrote: ' + email['body'];
     });
-    
-    
-    //create archive/unarchive button
-    
 
     archive = document.querySelector('#archive-button');
     archive.innerHTML = !email['archived'] ? 'Archive' : 'Unarchive';
