@@ -1,5 +1,7 @@
 Using JavaScript, HTML, and CSS, complete the implementation of your single-page-app email client inside of inbox.js (and not additional or other files; for grading purposes, we’re only going to be considering inbox.js!). You must fulfill the following requirements:
 
+Note to self: after archive/unarchive load_mailbox called multiple times for some reason. No idea why
+
 Send Mail: 
         DONE ==> When a user submits the email composition form, add JavaScript code to actually send 
         the email. You’ll likely want to make a POST request to /emails, passing in values for 
@@ -42,17 +44,17 @@ View Email:
 
 
 Archive and Unarchive: 
-    Allow users to archive and unarchive emails that they have received.
+    DONE ==> Allow users to archive and unarchive emails that they have received.
 
-    When viewing an Inbox email, the user should be presented with a 
+    DONE ==> When viewing an Inbox email, the user should be presented with a 
     button that lets them archive the email. When viewing an Archive email, 
     the user should be presented with a button that lets them unarchive the 
     email. This requirement does not apply to emails in the Sent mailbox.
 
-    Recall that you can send a PUT request to /emails/<email_id> to mark an email 
+    DONE ==> Recall that you can send a PUT request to /emails/<email_id> to mark an email 
     as archived or unarchived.
 
-    Once an email has been archived or unarchived, load the user’s inbox.
+    DONE ==> Once an email has been archived or unarchived, load the user’s inbox.
 
 
 Reply: 

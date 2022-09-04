@@ -44,9 +44,10 @@ function send_email(event) {
 
 function load_mailbox(mailbox) {
   // Show the mailbox and hide other views
-  document.querySelector('#emails-view').style.display = 'block';
+  
   document.querySelector('#compose-view').style.display = 'none';
   document.querySelector('#open-email-view').style.display = 'none';
+  document.querySelector('#emails-view').style.display = 'block';
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
@@ -55,6 +56,7 @@ function load_mailbox(mailbox) {
   .then(response => response.json())
   .then(emails => {
     // we have the emails, now need to display them on the page
+    console.log(emails);
     emails.forEach(email => {
       const element = document.createElement('div');
       if (email['read'] === true ) {
@@ -72,6 +74,7 @@ function load_mailbox(mailbox) {
 }
 
 function open_email(email){
+  
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'none';
@@ -95,15 +98,14 @@ function open_email(email){
         ${email['body']}
       </div>
     `;
-    //document.querySelector('#open-email-view').append(element);
-  
+
     fetch('/emails/' + email['id'], {
       method: 'PUT',
       body: JSON.stringify({
           read: true
       })
     }) 
-
+    //create reply button 
     const reply = document.querySelector('#reply');
     reply.addEventListener('click', function(){
       // Show compose view and hide other views
@@ -116,7 +118,24 @@ function open_email(email){
       document.querySelector('#compose-subject').value = 'Re: ' + email['subject'];
       document.querySelector('#compose-body').value = "\n\nOn " + email['timestamp'] + ", " + email['sender'] + ' wrote: ' + email['body'];
     });
+    
+    
+    //create archive/unarchive button
+    
+
+    archive = document.querySelector('#archive-button');
+    archive.innerHTML = !email['archived'] ? 'Archive' : 'Unarchive';
+   
+    archive.addEventListener('click', function(){
+      fetch('/emails/' + email['id'], {
+        method: 'PUT',
+        body: JSON.stringify({
+            archived: !email['archived']
+        }) 
+      }).then(response => {
+        console.log(response);
+        load_mailbox('inbox');
+      })
+    });
   }); 
 }
-
-
