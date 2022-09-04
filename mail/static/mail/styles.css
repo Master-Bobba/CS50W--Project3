@@ -1,3 +1,27 @@
 textarea {
     min-height: 400px;
 }
+
+.email-list-view {
+    border-top: 1px solid #b5b5b5;
+    height: 50px;
+    margin-left: 10px; 
+    margin-right: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    background-color: white;
+}
+
+.email-list-view-read {
+    border-top: 1px solid #b5b5b5;
+    height: 50px;
+    margin-left: 10px; 
+    margin-right: 10px;
+    cursor: pointer;
+    background-color: rgb(219, 219, 219);
+}
+
+.email-body-view {
+    border-top: 1px solid #b5b5b5;
+    height: 100px;
+}
