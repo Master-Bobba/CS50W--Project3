@@ -42,36 +42,7 @@ function send_email(event) {
 }
 
 
-function load_mailbox(mailbox) {
-  // Show the mailbox and hide other views
-  
-  document.querySelector('#compose-view').style.display = 'none';
-  document.querySelector('#open-email-view').style.display = 'none';
-  document.querySelector('#emails-view').style.display = 'block';
 
-  // Show the mailbox name
-  document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
-
-  fetch('/emails/'+ mailbox)
-  .then(response => response.json())
-  .then(emails => {
-    // we have the emails, now need to display them on the page
-    console.log(emails);
-    emails.forEach(email => {
-      const element = document.createElement('div');
-      if (email['read'] === true ) {
-        element.className = "email-list-view-read";
-      } else {
-        element.className = "email-list-view";
-      }
-      element.innerHTML = `
-      ${email['sender']}: ${email['subject']} <span style="float: right;"> ${email['timestamp']}</span>
-      `;
-      element.addEventListener('click', () => open_email(email));
-      document.querySelector('#emails-view').append(element);
-    });
-  });
-}
 
 function open_email(email){
   
@@ -115,9 +86,16 @@ function open_email(email){
 
       // Clear out composition fields
       document.querySelector('#compose-recipients').value = email['sender'];
-      document.querySelector('#compose-subject').value = 'Re: ' + email['subject'];
+      let subject = email['subject'];
+      if (subject.split(" ", 1)[0] != "Re:") {
+        subject = "Re: " + subject;
+      }
+      document.querySelector('#compose-subject').value = subject;
+      //document.querySelector('#compose-subject').value = 'Re: ' + email['subject'];
+
       document.querySelector('#compose-body').value = "\n\nOn " + email['timestamp'] + ", " + email['sender'] + ' wrote: ' + email['body'];
     });
+
 
     archive = document.querySelector('#archive-button');
     archive.innerHTML = !email['archived'] ? 'Archive' : 'Unarchive';
@@ -129,9 +107,41 @@ function open_email(email){
             archived: !email['archived']
         }) 
       }).then(response => {
-        console.log(response);
+        //console.log(response);
         load_mailbox('inbox');
+        
+        
       })
     });
   }); 
+}
+
+
+function load_mailbox(mailbox) {
+  document.querySelector('#compose-view').style.display = 'none';
+  document.querySelector('#open-email-view').style.display = 'none';
+  document.querySelector('#emails-view').style.display = 'block';
+
+  // Show the mailbox name
+  document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+
+  fetch('/emails/'+ mailbox)
+  .then(response => response.json())
+  .then(emails => {
+    // we have the emails, now need to display them on the page
+    console.log(emails);
+    emails.forEach(email => {
+      const element = document.createElement('div');
+      if (email['read'] === true ) {
+        element.className = "email-list-view-read";
+      } else {
+        element.className = "email-list-view";
+      }
+      element.innerHTML = `
+      ${email['sender']}: ${email['subject']} <span style="float: right;"> ${email['timestamp']}</span>
+      `;
+      element.addEventListener('click', () => open_email(email));
+      document.querySelector('#emails-view').append(element);
+    });
+  });
 }
